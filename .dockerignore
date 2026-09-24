@@ -1,0 +1,10 @@
+.git
+.github
+build*
+bin*
+cmake-build-*
+.DS_Store
+.vscode
+.idea
+__pycache__
+*.pyc

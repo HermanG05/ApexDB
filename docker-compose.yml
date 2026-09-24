@@ -1,0 +1,33 @@
+x-node: &node
+  build: .
+  init: true
+  stop_grace_period: 15s
+  healthcheck:
+    test: ["CMD", "kv-client", "ping"]
+    interval: 5s
+    timeout: 3s
+    retries: 5
+    start_period: 5s
+
+services:
+  shard0:
+    <<: *node
+    command: ["kv-shard", "--id", "0", "--shards", "3", "--port", "6379"]
+  shard1:
+    <<: *node
+    command: ["kv-shard", "--id", "1", "--shards", "3", "--port", "6379"]
+  shard2:
+    <<: *node
+    command: ["kv-shard", "--id", "2", "--shards", "3", "--port", "6379"]
+  proxy:
+    <<: *node
+    command: ["kv-proxy", "--shard", "shard0:6379", "--shard", "shard1:6379", "--shard", "shard2:6379"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    depends_on:
+      shard0:
+        condition: service_healthy
+      shard1:
+        condition: service_healthy
+      shard2:
+        condition: service_healthy
