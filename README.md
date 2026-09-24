@@ -1,4 +1,4 @@
-# RexDB
+# ApexDB
 
 An in-memory key-value store with a TCP client, hash-based sharding, sorted sets, and millisecond TTLs. The storage engine uses an incrementally rehashed table, an AVL tree for ordered members, and a min-heap for expiration. A `poll` event loop handles client connections; a worker pool disposes of large sorted sets.
 
